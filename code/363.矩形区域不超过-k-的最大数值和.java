@@ -34,6 +34,7 @@
 // @lc code=start
 class Solution {
     private int findMax(int[] dp, int k) {
+        // using greedy to find max first
         int max = dp[0], curr = dp[0];
 
         for(int i = 1; i < dp.length; i++) {
@@ -42,7 +43,7 @@ class Solution {
         }
         if (max <= k) return max;
 
-        
+        // if max is more than k, we need use brute force to find max near k.
         max = Integer.MIN_VALUE;
         for(int i = 0; i < dp.length; i++) {
             int sum = 0;
@@ -57,6 +58,7 @@ class Solution {
         }
         return max;
     }
+    
     public int maxSumSubmatrix(int[][] matrix, int k) {
 
         int rows = matrix.length, cols = matrix[0].length;
