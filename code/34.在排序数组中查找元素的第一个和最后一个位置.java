@@ -57,7 +57,6 @@ class Solution {
 
         return new int[]{i, j - 1};
 
-
     }
 }
 // @lc code=end

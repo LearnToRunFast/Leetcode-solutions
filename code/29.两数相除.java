@@ -49,16 +49,17 @@
 // @lc code=start
 class Solution {
     public int divide(int dividend, int divisor) {
-        // edge case
+        // edge case, only case that will cause overflow
         if (dividend == Integer.MIN_VALUE && divisor == -1) return Integer.MAX_VALUE;
 
         // check left most bits
-        //somehow >> 1 will causing the left most bit become 1 instead of 0
-        boolean sameSign = (dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0);
+        boolean sameSign = ((dividend >>> 31) ^ (divisor >>> 31)) == 0 ? true : false;
+
         int ans = 0;
         dividend = dividend > 0 ? ~(dividend - 1) : dividend;
         divisor = divisor > 0 ? ~(divisor - 1) : divisor;
 
+        //be aware that now , dividend and divisor are both negative
         while(dividend <= divisor) {
             int tmp = divisor;
             int factor = 1;

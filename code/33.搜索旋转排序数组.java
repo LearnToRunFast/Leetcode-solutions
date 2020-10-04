@@ -39,7 +39,9 @@
 // @lc code=start
 class Solution {
     public int search(int[] nums, int target) {
-        int l = 0, r = nums.length;
+        //put -1 here to ensure r will never go to n
+        // so in the last return no need to check l != nums.length
+        int l = 0, r = nums.length - 1; 
 
         while(l < r) {
             int mid = l + (r - l) / 2;
@@ -57,7 +59,7 @@ class Solution {
 
         }
     
-        return l != nums.length && nums[l] == target ? l : -1;
+        return nums[l] == target ? l : -1;
     }
 }
 // @lc code=end
