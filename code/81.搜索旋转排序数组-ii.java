@@ -41,51 +41,83 @@
 
 // @lc code=start
 class Solution {
-    private boolean search(int[] nums, int l, int r, int target) {
-        if (r == -1) return false;
+    // private boolean search(int[] nums, int l, int r, int target) {
+    //     if (r == -1) return false;
+
+    //     while (l < r) {
+    //         int mid = l + (r - l) / 2;
+    //         if (target == nums[mid]) return true;
+
+    //         // no sorted
+    //         if (nums[l] > nums[mid]) {
+    //             if (target > nums[mid] && target <= nums[r]) {
+    //                 l = mid + 1;
+    //             } else {
+    //                 r = mid;
+    //             }
+
+    //         // sorted
+    //         } else if (nums[l] < nums[mid]) {
+    //             if (target >= nums[l] && target <= nums[mid]) {
+    //                 r = mid;
+    //             } else {
+    //                 l = mid + 1;
+    //             }
+
+    //         } else {
+    //             // if nums[l] == nums[mid] == nums[r]
+    //             if (nums[mid] == nums[r]) {
+    //                 return search(nums, l + 1, mid - 1, target) || 
+    //                        search(nums, mid + 1, r - 1, target);
+    //             }
+
+    //             if (nums[r] > nums[l] && target < nums[l]) {
+    //                 return false;
+    //             }
+
+    //             l = mid + 1;
+    //         }
+    //     }
+
+    //     return nums[l] == target ? true : false;
+        
+    // }
+    // public boolean search(int[] nums, int target) {
+
+    //     return search(nums, 0, nums.length - 1, target);
+    // }
+    public boolean search(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return false;
+
+        int l = 0, r = nums.length - 1;
 
         while (l < r) {
-            int mid = l + (r - l) / 2;
-            if (target == nums[mid]) return true;
 
-            // no sorted
-            if (nums[l] > nums[mid]) {
+            int mid = l + (r - l) / 2;
+
+            if (nums[mid] == target) return true;
+
+            if (nums[l] == nums[mid]) {
+                l++;
+                continue;
+            }
+
+            if (nums[l] < nums[mid]) {
+                if (target >= nums[l] && target < nums[mid]) {
+                    r = mid;
+                } else {
+                    l = mid + 1;
+                }
+            } else {
                 if (target > nums[mid] && target <= nums[r]) {
                     l = mid + 1;
                 } else {
                     r = mid;
                 }
-
-            // sorted
-            } else if (nums[l] < nums[mid]) {
-                if (target > nums[mid] || target < nums[l]) {
-                    l = mid + 1;
-                } else {
-                    r = mid;
-                }
-
-            } else {
-                // if nums[l] == nums[mid] == nums[r]
-                if (nums[mid] == nums[r]) {
-                    return search(nums, l + 1, mid - 1, target) || 
-                           search(nums, mid + 1, r - 1, target);
-                }
-
-                if ((nums[r] < nums[l] && target > nums[l]) ||
-                    (nums[r] > nums[l] && target < nums[l])) {
-                    return false;
-                }
-
-                l = mid + 1;
             }
+
         }
-
         return nums[l] == target ? true : false;
-        
-    }
-    public boolean search(int[] nums, int target) {
-
-        return search(nums, 0, nums.length - 1, target);
     }
 }
 // @lc code=end
