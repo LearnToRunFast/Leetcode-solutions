@@ -42,6 +42,7 @@
  * 
  */
 class Solution {
+
     public double myPow(double x, int n) {
         // long N = n;
         // if (N == 0) return 1;
@@ -53,14 +54,15 @@ class Solution {
 
         // return N % 2 == 0 ? myPow(x*x, N/2) : myPow(x*x, N/2) * x;
 
-        long N = n;
+        long N = n; // prevent integer.min to max overflow
         if (N < 0) {
             N = -N;
-            x = 1/ x;
+            x = 1 / x;
         }
+
         double ans = 1;
         double accum = x;
-        for (long i = N; i> 0; i /= 2) {
+        for (long i = N; i > 0; i >>= 1) {
             if (i % 2 == 1) ans = ans * accum;
             accum *= accum;
         }

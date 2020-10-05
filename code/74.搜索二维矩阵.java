@@ -47,6 +47,7 @@
 
 // @lc code=start
 class Solution {
+
     public boolean searchMatrix(int[][] matrix, int target) {
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
             return false;
@@ -61,7 +62,7 @@ class Solution {
                     return true;
                 int l = 0, h = m;
                 while (l < h) {
-                    int mid = (l + h) >>> 1;
+                    int mid = l + (h - l) / 2;
                     if (matrix[i][mid] < target) {
                         l = mid + 1;
                     } else {
