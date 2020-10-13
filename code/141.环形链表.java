@@ -81,6 +81,10 @@
  * }
  */
 public class Solution {
+    // let the length be x , y and z
+    // L = y + z
+    // M = x + y
+    // prove x mod L = z 
     public boolean hasCycle(ListNode head) {
         ListNode slow = head , fast = head;
         while (fast != null && fast.next != null) {
