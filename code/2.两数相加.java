@@ -41,8 +41,8 @@
  */
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode ans = new ListNode();
-        ListNode dummyHead = ans;
+        ListNode head = new ListNode();
+        ListNode dummyHead = head;
         int carry = 0;
         while (l1 != null || l2 != null || carry != 0) {
             if (l1 != null) {
@@ -54,9 +54,9 @@ class Solution {
                 l2 = l2.next;
             }
 
-            ans.next = new ListNode(carry % 10);
+            head.next = new ListNode(carry % 10);
             carry /= 10;
-            ans = ans.next;
+            head = head.next;
         }
 
         return dummyHead.next;
