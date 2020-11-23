@@ -172,9 +172,9 @@ class Solution {
                 for (int j = 0; j <= i; j++) {
                     TreeNode rootCopy = clone(root);
                     TreeNode curr = rootCopy;
-
-                    for (int step = 0; step < j; step++) {
-                        if (curr == null) break;
+                    
+                    int step = 0;
+                    while (curr != null && step++ < j) {
                         curr = curr.right;
                     }
 
