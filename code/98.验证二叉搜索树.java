@@ -63,19 +63,20 @@ import javax.swing.tree.TreeNode;
  */
 // in order traversal
 // class Solution {
+
 //     public boolean isValidBST(TreeNode root) {
 //         LinkedList<TreeNode> stack = new LinkedList<>();
-//         TreeNode prev = null;
+//         Integer prev = null;
 //         while (root != null || !stack.isEmpty()) {
 //             while (root != null) {
 //                 stack.push(root);
 //                 root = root.left;
 //             }
 //             TreeNode curr = stack.pop();
-//             if (prev != null && prev.val >= curr.val) {
+//             if (prev != null && prev >= curr.val) {
 //                 return false;
 //             }
-//             prev = curr;
+//             prev = curr.val;
 //             root = curr.right;
 //         }
 //         return true;
