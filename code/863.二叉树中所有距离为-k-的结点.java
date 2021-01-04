@@ -162,38 +162,76 @@ import javax.swing.tree.TreeNode;
 //         return ans;
 //     }
 // }
+// class Solution {
+
+//     private List<Integer> ans;
+//     private Map<TreeNode, Integer> memo;
+//     private void normalizeCordinate(TreeNode root, int pos) {
+//         if (root == null)return;
+//         memo.put(root, pos);
+//         normalizeCordinate(root.left, 2 * pos);
+//         normalizeCordinate(root.right, 2 * pos + 1);
+//     }
+//     private int getDist(int from, int to) {
+//         int dist = 0;
+//         while (from != to) {
+//             if (from > to) {
+//                 from = from / 2;
+//             } else {
+//                 to = to / 2;
+//             }
+//             dist++;
+//         }
+//         return dist;
+//     }
+//     public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+//         ans = new ArrayList<>();
+//         memo = new HashMap<>();
+//         normalizeCordinate(root, 1);
+//         int targetPos = memo.get(target);
+//         for (Map.Entry<TreeNode, Integer> entry: memo.entrySet()) {
+//             if (getDist(entry.getValue(), targetPos) == K) {
+//                 ans.add(entry.getKey().val);
+//             }
+//         }
+//         return ans;
+//     }
+// }
 class Solution {
 
     private List<Integer> ans;
-    private Map<TreeNode, Integer> memo;
-    private void normalizeCordinate(TreeNode root, int pos) {
-        if (root == null)return;
-        memo.put(root, pos);
-        normalizeCordinate(root.left, 2 * pos);
-        normalizeCordinate(root.right, 2 * pos + 1);
-    }
-    private int getDist(int from, int to) {
-        int dist = 0;
-        while (from != to) {
-            if (from > to) {
-                from = from / 2;
-            } else {
-                to = to / 2;
-            }
-            dist++;
+    private TreeNode targetsParent;
+    private boolean splitTree(TreeNode root, TreeNode target, TreeNode parent) {
+        if (root == null) return false;
+        if (root == target) {
+            targetsParent = parent;
+            return true;
         }
-        return dist;
+        // found target on left tree
+        if (splitTree(root.left, target, root)) {
+            root.left = parent;
+            return true;
+        }
+        if (splitTree(root.right, target, root)) {
+            root.right = parent;
+            return true;
+        }
+        return false;
+    }
+    private void findKdistNode(TreeNode root, int dist, int K) {
+        if (root == null) return;
+        if (dist == K) {
+            ans.add(root.val);
+            return;
+        }
+        findKdistNode(root.left, dist + 1, K);
+        findKdistNode(root.right, dist + 1, K);
     }
     public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
         ans = new ArrayList<>();
-        memo = new HashMap<>();
-        normalizeCordinate(root, 1);
-        int targetPos = memo.get(target);
-        for (Map.Entry<TreeNode, Integer> entry: memo.entrySet()) {
-            if (getDist(entry.getValue(), targetPos) == K) {
-                ans.add(entry.getKey().val);
-            }
-        }
+        splitTree(root, target, null);
+        findKdistNode(target, 0, K);
+        findKdistNode(targetsParent, 1, K);
         return ans;
     }
 }
