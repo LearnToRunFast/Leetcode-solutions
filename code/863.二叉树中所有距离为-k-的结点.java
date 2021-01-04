@@ -113,52 +113,87 @@ import javax.swing.tree.TreeNode;
 //         return ans;
 //     }
 // }
+// class Solution {
+
+//     private List<Integer> ans;
+//     private int K;
+//     private TreeNode target;
+//     private void addNodes(TreeNode root, int dist) {
+//         if (dist > K || root == null) return;
+//         if (dist == K) {
+//             ans.add(root.val);
+//             return;
+//         }
+//         addNodes(root.left, dist + 1);
+//         addNodes(root.right, dist + 1);
+//     }
+//     private int dfs(TreeNode root) {
+//         if (root == null) return -1;
+//         if (root == target) {
+//             addNodes(root, 0);
+//             return 1;
+//         }
+
+//         int left = dfs(root.left);
+//         int right = dfs(root.right);
+
+//         if (left != -1) {
+//             if (left == K) {
+//                 ans.add(root.val);
+//             }
+//             addNodes(root.right, left + 1);
+//             return left + 1;
+//         }
+//         if (right != -1) {
+//             if (right == K) {
+//                 ans.add(root.val);
+//             }
+//             addNodes(root.left, right + 1);
+            
+//             return right + 1;
+//         }
+//         return -1;
+//     }
+//     public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+//         ans = new ArrayList<>();
+//         this.K = K;
+//         this.target = target;
+//         dfs(root);
+//         return ans;
+//     }
+// }
 class Solution {
 
     private List<Integer> ans;
-    private int K;
-    private TreeNode target;
-    private void addNodes(TreeNode root, int dist) {
-        if (dist > K || root == null) return;
-        if (dist == K) {
-            ans.add(root.val);
-            return;
-        }
-        addNodes(root.left, dist + 1);
-        addNodes(root.right, dist + 1);
+    private Map<TreeNode, Integer> memo;
+    private void normalizeCordinate(TreeNode root, int pos) {
+        if (root == null)return;
+        memo.put(root, pos);
+        normalizeCordinate(root.left, 2 * pos);
+        normalizeCordinate(root.right, 2 * pos + 1);
     }
-    private int dfs(TreeNode root) {
-        if (root == null) return -1;
-        if (root == target) {
-            addNodes(root, 0);
-            return 1;
-        }
-
-        int left = dfs(root.left);
-        int right = dfs(root.right);
-
-        if (left != -1) {
-            if (left == K) {
-                ans.add(root.val);
+    private int getDist(int from, int to) {
+        int dist = 0;
+        while (from != to) {
+            if (from > to) {
+                from = from / 2;
+            } else {
+                to = to / 2;
             }
-            addNodes(root.right, left + 1);
-            return left + 1;
+            dist++;
         }
-        if (right != -1) {
-            if (right == K) {
-                ans.add(root.val);
-            }
-            addNodes(root.left, right + 1);
-            
-            return right + 1;
-        }
-        return -1;
+        return dist;
     }
     public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
         ans = new ArrayList<>();
-        this.K = K;
-        this.target = target;
-        dfs(root);
+        memo = new HashMap<>();
+        normalizeCordinate(root, 1);
+        int targetPos = memo.get(target);
+        for (Map.Entry<TreeNode, Integer> entry: memo.entrySet()) {
+            if (getDist(entry.getValue(), targetPos) == K) {
+                ans.add(entry.getKey().val);
+            }
+        }
         return ans;
     }
 }
