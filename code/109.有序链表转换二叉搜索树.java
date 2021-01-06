@@ -62,6 +62,7 @@ class Solution {
     private TreeNode helper(ListNode head, ListNode tail) {
         if (head == tail) return null;
         ListNode slow = head, fast = head;
+        // can use dummy head here
     //     ListNode dummyHead = new ListNode(-1);
     //     dummyHead.next = head;
     //    ListNode slow = dummyHead, fast = dummyHead;
