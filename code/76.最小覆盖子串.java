@@ -61,7 +61,6 @@ class Solution {
         }
 
         int l = 0, r = 0;
-        
         int start = 0, len = sLen + 1;
         int needCount = 0;
         // [l, r)
