@@ -49,42 +49,52 @@
 // @lc code=start
 class Solution {
     public String minWindow(String s, String t) {
-        String ans = "";
         int sLen = s.length(), tLen = t.length();
-        if (sLen < tLen) return ans;
+        if (sLen < tLen) return "";
 
-        int[] window = new int[128]; //ascii table size
-        int[] need = new int[128];
+        //ascii table size
+        int[] window = new int[128]; // store window string
+        int[] need = new int[128]; // store t string
 
         for (int i = 0; i < tLen; i++) {
             need[t.charAt(i)]++;
         }
 
-        int needCount = 0, min = sLen + 1;
         int l = 0, r = 0;
-
+        
+        int start = 0, len = sLen + 1;
+        int needCount = 0;
+        // [l, r)
         while (r < sLen) {
             char c = s.charAt(r);
-            window[c]++;
+            r++;
 
-            if (window[c] <= need[c]) needCount++;
-
+            if (need[c] > 0) {
+                window[c]++;
+                if (window[c] <= need[c]) {
+                    needCount++;
+                }
+            }
+            // move l until the window is no longer valid window for string "t"
             while (needCount == tLen) {
-                if (min > r - l + 1) {
-                    ans = s.substring(l, r + 1);
-                    min = r - l + 1;
+                if (len > r - l) {
+                    start = l;
+                    len = r - l;
                 }
 
                 // start moving index l
-                char leftChar = s.charAt(l);
-                window[leftChar]--;
-                if (window[leftChar] < need[leftChar]) needCount--;
+                char d = s.charAt(l);
                 l++;
+                
+                if (need[d] > 0) {
+                    if (need[d] == window[d]) {
+                        needCount--;
+                    }
+                    window[d]--;
+                }
             }
-            r++;
         }
-
-        return ans;
+        return len == sLen + 1 ? "" : s.substring(start, start + len);
     }
 }
 // @lc code=end
