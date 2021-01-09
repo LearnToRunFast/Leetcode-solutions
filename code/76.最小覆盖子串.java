@@ -86,7 +86,7 @@ class Solution {
                 l++;
                 
                 if (need[d] > 0) {
-                    if (need[d] == window[d]) {
+                    if (window[d] <= need[d]) {
                         needCount--;
                     }
                     window[d]--;
