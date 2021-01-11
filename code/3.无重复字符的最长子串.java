@@ -77,7 +77,6 @@ class Solution {
             }
             ans = Math.max(ans, r - l);
         }
-        ans = Math.max(r - l, ans);
         return ans;
     }
 }
