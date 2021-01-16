@@ -39,67 +39,93 @@
  * Definition for singly-linked list. public class ListNode { int val; ListNode
  * next; ListNode(int x) { val = x; } }
  */
-class Solution {
+// class Solution {
 
-    // public ListNode reverseKGroup(ListNode head, int k) {
-    //     ListNode curr = head;
-    //     int count = 0;
-    //     while (curr != null && count < k) {
-    //         curr = curr.next;
-    //         count++;
-    //     }
-    //     // if curr is not null curr will be point to next set
-    //     if (count == k) {
-    //         // assume it works
-    //         curr = reverseKGroup(curr, k);
+//     // public ListNode reverseKGroup(ListNode head, int k) {
+//     //     ListNode curr = head;
+//     //     int count = 0;
+//     //     while (curr != null && count < k) {
+//     //         curr = curr.next;
+//     //         count++;
+//     //     }
+//     //     // if curr is not null curr will be point to next set
+//     //     if (count == k) {
+//     //         // assume it works
+//     //         curr = reverseKGroup(curr, k);
 
-    //         while (count-- > 0) {
-    //             ListNode backUp = head.next;
-    //             head.next = curr;
-    //             curr = head;
-    //             head = backUp;
-    //         }
-    //         head = curr;
-    //     }
-    //     return head;
-    // }
+//     //         while (count-- > 0) {
+//     //             ListNode backUp = head.next;
+//     //             head.next = curr;
+//     //             curr = head;
+//     //             head = backUp;
+//     //         }
+//     //         head = curr;
+//     //     }
+//     //     return head;
+//     // }
     
-    private ListNode reverse(ListNode head) {
-        ListNode tail = null;
-        while (head != null) {
+//     private ListNode reverse(ListNode head) {
+//         ListNode tail = null;
+//         while (head != null) {
+//             ListNode next = head.next;
+//             head.next = tail;
+//             tail = head;
+//             head = next;
+//         }
+//         return tail;
+//     }
+//     public ListNode reverseKGroup(ListNode head, int k) {
+//         ListNode pre = new ListNode(0);
+//         ListNode end = pre;
+//         ListNode ans = pre;
+//         pre.next = head;
+
+//         while (end.next != null) {
+//             for (int i = 0; i < k && end != null; i++) {
+//                 end = end.next;
+//             }
+
+//             if (end == null) break; // less than k
+
+//             ListNode start = pre.next;
+//             ListNode nextStart = end.next;
+
+//             end.next = null; // set terminator
+
+//             pre.next = reverse(start);
+//             pre = start;
+//             start.next = nextStart;
+            
+//             end = pre;
+
+//         }
+//         return ans.next;
+
+//     }
+// }
+class Solution {
+    
+    private ListNode reverse(ListNode head, ListNode end) {
+        ListNode pre = null;
+        while (head != end) {
             ListNode next = head.next;
-            head.next = tail;
-            tail = head;
+            head.next = pre;
+            pre = head;
             head = next;
         }
-        return tail;
+        return pre;
     }
     public ListNode reverseKGroup(ListNode head, int k) {
-        ListNode pre = new ListNode(0);
-        ListNode end = pre;
-        ListNode ans = pre;
-        pre.next = head;
-
-        while (end.next != null) {
-            for (int i = 0; i < k && end != null; i++) {
-                end = end.next;
-            }
-
-            if (end == null) break; // less than k
-
-            ListNode start = pre.next;
-            ListNode nextStart = end.next;
-
-            end.next = null; // set terminator
-
-            pre.next = reverse(start);
-            pre = start;
-            start.next = nextStart;
-            
-            end = pre;
-
+        if (head == null) return null;
+        ListNode curr = head;
+        for (int i = 0; i < k; i++) {
+            if (curr == null) return head;
+            curr = curr.next;
         }
-        return ans.next;
+        ListNode newHead = reverse(head, curr);
+
+        head.next = reverseKGroup(curr, k);
+        return newHead;
 
     }
 }
