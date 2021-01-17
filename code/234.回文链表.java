@@ -46,14 +46,13 @@ class Solution {
         
         ListNode prev = null;
         ListNode curr = head;
-        while (curr.next != null) {
-            ListNode tmp = curr.next;
+        while (curr != null) {
+            ListNode next = curr.next;
             curr.next = prev;
             prev = curr;
-            curr = tmp;
+            curr = next;
         }
-        curr.next = prev;
-        return curr;
+        return prev;
     }
     public boolean isPalindrome(ListNode head) {
         if (head == null) return true;
@@ -76,5 +75,21 @@ class Solution {
         return true;
     }
 }
+// class Solution {
+//     ListNode left;
+//     private boolean helper(ListNode right) {
+//         if (right == null) return true;
+//         boolean res = helper(right.next);
+//         if (res == false) return res;
+//         res = right.val == left.val;
+//         left = left.next;
+//         return res;
+//     }
+//     public boolean isPalindrome(ListNode head) {
+//         left = head;
+//         return helper(head);
+//     }
+// }
+
 // @lc code=end
 
