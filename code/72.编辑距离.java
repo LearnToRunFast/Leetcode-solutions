@@ -67,7 +67,11 @@ class Solution {
         if (m * n == 0) {
             return m + n;
         }
-
+        // only three opeartions
+        // insert to A
+        // insert to B
+        // modify A
+        // dp[i][j] means word1 from 0 - i and word2 from 0 - j's minDistance
         int[][] dp = new int[m + 1][n + 1];
         
         for (int i = 0; i <= m; i++) {
@@ -80,10 +84,13 @@ class Solution {
 
         for (int i = 1; i <= m; i++) {
             for (int j = 1; j <= n; j++) {
-                int down = dp[i - 1][j];
-                int left = dp[i][j - 1];
-                int down_left = dp[i - 1][j - 1];
+                int down = dp[i - 1][j]; // insert into word2
+                int left = dp[i][j - 1]; // insert into word1
+                int down_left = dp[i - 1][j - 1]; // edit word1
                 
+                // if prev is same, we need to minus 1
+                // as if i - 1 and j - 1 are same
+                // dp[i - 1][j - 1] == dp[i][j]
                 if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
                     down_left--;
                 }
