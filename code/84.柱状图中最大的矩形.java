@@ -1,4 +1,6 @@
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Stack;
 
 /*
  * @lc app=leetcode.cn id=84 lang=java
@@ -41,28 +43,55 @@ import java.util.LinkedList;
  */
 
 // @lc code=start
+// class Solution {
+//     public int largestRectangleArea(int[] heights) {
+//         if (heights.length == 0) return 0;
+//         if (heights.length == 1) return heights[0];
+
+//         int ans = 0;
+//         int[] newHeights = new int[heights.length + 2];
+//         for (int i = 1; i <= heights.length; i++) {
+//             newHeights[i] = heights[i - 1];
+//         }
+
+//         LinkedList<Integer> stack = new LinkedList<>();
+//         stack.push(0); // dummy node, so that no need to check empty stack later.
+
+//         for (int r = 1; r < newHeights.length; r++) {
+//             while (newHeights[r] < newHeights[stack.peek()]) {
+//                 int idx = stack.poll();
+//                 int l = stack.peek();
+//                 ans = Math.max(ans, (r - l - 1) * newHeights[idx]);
+//             }
+//             stack.push(r);
+//         }
+//         return ans;
+//     }
+// }
 class Solution {
     public int largestRectangleArea(int[] heights) {
         if (heights.length == 0) return 0;
         if (heights.length == 1) return heights[0];
 
         int ans = 0;
-        int[] newHeights = new int[heights.length + 2];
-        for (int i = 1; i <= heights.length; i++) {
-            newHeights[i] = heights[i - 1];
-        }
 
         LinkedList<Integer> stack = new LinkedList<>();
-        stack.push(0); // dummy node, so that no need to check empty stack later.
+       // stack.push(-1); // dummy node, so that no need to check empty stack later.
 
-        for (int r = 1; r < newHeights.length; r++) {
-            while (newHeights[r] < newHeights[stack.peek()]) {
+        for (int r = 0; r < heights.length; r++) {
+            while (!stack.isEmpty() && heights[r] < heights[stack.peek()]) {
                 int idx = stack.poll();
-                int l = stack.peek();
-                ans = Math.max(ans, (r - l - 1) * newHeights[idx]);
+                int l = stack.isEmpty() ? -1 : stack.peek();
+                ans = Math.max(ans, (r - l - 1) * heights[idx]);
             }
             stack.push(r);
         }
+        // clean up
+        while (!stack.isEmpty()) {
+            int idx = stack.poll();
+            int l = stack.isEmpty() ? -1 : stack.peek();
+            ans = Math.max(ans, (heights.length - l - 1) * heights[idx]);
+        } 
         return ans;
     }
 }
