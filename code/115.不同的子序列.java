@@ -69,25 +69,48 @@
  */
 
 // @lc code=start
+// class Solution {
+//     public int numDistinct(String s, String t) {
+//         if (t.length() > s.length()) return 0;
+//         int[][] dp = new int[s.length() + 1][t.length() + 1];
+//         for (int i = 0; i <= s.length(); i++) {
+//             dp[i][0] = 1;
+//         }
+//         for (int i = 1; i <= s.length(); i++) {
+//             for (int j = 1; j <= t.length(); j++) {
+//                 if (s.charAt(i - 1) == t.charAt(j - 1)) {
+//                     // included s[i - 1] and not included s[i - 1]
+//                     // dp[i - 1][j] bagg  bag case
+//                     dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+//                     continue;
+//                 }
+//                 dp[i][j] = dp[i - 1][j];
+//             } 
+//         }
+//         return dp[s.length()][t.length()];
+//     }
+// }
 class Solution {
     public int numDistinct(String s, String t) {
         if (t.length() > s.length()) return 0;
-        int[][] dp = new int[s.length() + 1][t.length() + 1];
-        for (int i = 0; i <= s.length(); i++) {
-            dp[i][0] = 1;
-        }
+        int[] dp = new int[t.length() + 1];
+        int prev_j;
+        int prev_j_1;
         for (int i = 1; i <= s.length(); i++) {
+            dp[0] = 1;
+            prev_j_1 = dp[0]; // dp[i - 1][0]
             for (int j = 1; j <= t.length(); j++) {
+                prev_j = dp[j];
                 if (s.charAt(i - 1) == t.charAt(j - 1)) {
                     // included s[i - 1] and not included s[i - 1]
                     // dp[i - 1][j] bagg  bag case
-                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
-                    continue;
+                    dp[j] = prev_j_1 + dp[j];
                 }
-                dp[i][j] = dp[i - 1][j];
+                prev_j_1 = prev_j;
+                //dp[j] = dp[j];
             } 
         }
-        return dp[s.length()][t.length()];
+        return dp[t.length()];
     }
 }
 // @lc code=end
