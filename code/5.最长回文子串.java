@@ -55,6 +55,10 @@ class Solution {
         for (int i = 0; i < newS.length; i++) {
             // in range
             if (i <= r) {
+                // (r - i) * 2 + 1 is the boundary of r, as we know curr max palindrome is [l, r]
+                // dp[l + r - i] is the mirror value of newS[i]
+                // so dp[l + r - i] will be the max value of dp[i] can go
+                // between this two, we can min value and expend it later. 
                 dp[i] = Math.min((r - i) * 2 + 1, dp[l + r - i]);
             } else {
                 dp[i] = 1;
@@ -93,7 +97,7 @@ class Solution {
         // System.out.println();
 
         // System.out.println("len " + len + " pos " + pos);
-        
+
         // map back
         pos = pos / 2 - len / 4;
         len = len / 2;
