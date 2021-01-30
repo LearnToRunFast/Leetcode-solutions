@@ -87,16 +87,6 @@ class Solution {
                 pos = i;
             }
         }
-        // for(int i = 0; i < dp.length; i++) {
-        //     System.out.printf("%s ",newS[i]);
-        // }
-        // System.out.println();
-        // for(int i = 0; i < dp.length; i++) {
-        //     System.out.printf("%d ",dp[i]);
-        // }
-        // System.out.println();
-
-        // System.out.println("len " + len + " pos " + pos);
 
         // map back
         pos = pos / 2 - len / 4;
