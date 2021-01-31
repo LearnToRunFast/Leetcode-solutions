@@ -47,7 +47,7 @@ class Solution {
 
     private void backtrack(List<List<String>> res, String s, ArrayList<String> tmp) {
         if (s == null || s.length() == 0)
-            res.add(tmp);
+            res.add(new ArrayList<>(tmp));
         for (int i = 1; i <= s.length(); i++) {
             if (isPalidrome(s.substring(0, i))) {
                 tmp.add(s.substring(0, i));
