@@ -102,7 +102,7 @@ class Solution {
         if (nums.length == k) return nums;
 
         int[] maxSeq = new int[k];
-        
+
         int extra = nums.length - k;
         int curr = -1;
 
@@ -138,7 +138,7 @@ class Solution {
             return maxNumber(nums2, nums1, k);
         }
         int[] maxSeq = new int[k];
-        int i = k - nums1.length > 0  ? nums1.length: k;
+        int i = Math.min(nums1.length, k);
         int end = Math.max(k - nums2.length, 0);
         for(; i >= end; i--) { 
             //System.out.println("==================");
