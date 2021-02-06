@@ -70,18 +70,18 @@ class Solution {
 
             stack.push(num.charAt(i));
         }
-
+        // delete prefix 0
         while (!stack.isEmpty() && stack.peekLast() == '0') {
             stack.pollLast();
             remain--;
         }
-
+        // get only len of "remain"
         int curr = 0;
         while (!stack.isEmpty() && curr < remain) {
             sb.append(stack.pollLast());
             curr++;
         }
-
+        // if the answer is '0' will become empty after delete prefix 0
         return sb.length() > 0 ? sb.toString() : "0";
     }
 }
