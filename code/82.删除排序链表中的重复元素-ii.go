@@ -36,29 +36,43 @@
  *     Next *ListNode
  * }
  */
+// func deleteDuplicates(head *ListNode) *ListNode {
+// 	if head == nil || head.Next == nil {
+// 		return head
+// 	}
+// 	dummy := &ListNode{0, head}
+// 	l, m, r := dummy, head, head.Next
+// 	for ; r != nil; r = r.Next {
+// 		if r.Val > m.Val {
+// 			if m.Next == r {
+// 				l.Next = m
+// 				l = l.Next
+// 				m = m.Next
+// 			} else {
+// 				m = r
+// 			}
+// 		}
+// 	}
+// 	if m.Next == nil {
+// 		l.Next = m
+// 		l = l.Next
+// 	}
+// 	l.Next = nil
+// 	return dummy.Next
+// }
 func deleteDuplicates(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
 	}
-	dummy := &ListNode{0, head}
-	l, m, r := dummy, head, head.Next
-	for ; r != nil; r = r.Next {
-		if r.Val > m.Val {
-			if m.Next == r {
-				l.Next = m
-				l = l.Next
-				m = m.Next
-			} else {
-				m = r
-			}
-		}
+	if head.Val != head.Next.Val {
+		head.Next = deleteDuplicates(head.Next)
+		return head
 	}
-	if m.Next == nil {
-		l.Next = m
-		l = l.Next
+
+	for head != nil && head.Next != nil && head.Val == head.Next.Val {
+		head = head.Next
 	}
-	l.Next = nil
-	return dummy.Next
+	return deleteDuplicates(head.Next)
 }
 
 // @lc code=end
