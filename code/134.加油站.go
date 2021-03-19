@@ -81,6 +81,7 @@ func canCompleteCircuit(gas []int, cost []int) int {
 	if spare < 0 {
 		return -1
 	}
+
 	return (minIdx + 1) % len(gas)
 }
 
