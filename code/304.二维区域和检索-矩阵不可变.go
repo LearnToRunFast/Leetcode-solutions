@@ -51,37 +51,28 @@ type NumMatrix struct {
 
 func Constructor(matrix [][]int) NumMatrix {
 	m, n := len(matrix), len(matrix[0])
-	sum := make([][]int, m)
-	prevRow := make([]int, n+1)
-	for i := range matrix {
-		sum[i] = make([]int, n)
-		for j, v := range matrix[i] {
-			prev := 0
-			if j > 0 {
-				prev = sum[i][j-1]
-			}
-			sum[i][j] = v + prev + prevRow[j+1] - prevRow[j]
-		}
-		// update preRow
-		for k := 1; k <= n; k++ {
-			prevRow[k] = sum[i][k-1]
+	sum := make([][]int, m+1)
+	sum[0] = make([]int, n+1)
+	for i, row := range matrix {
+		sum[i+1] = make([]int, n+1)
+		for j, v := range row {
+			sum[i+1][j+1] = v + sum[i+1][j] + sum[i][j+1] - sum[i][j]
 		}
 	}
 	return NumMatrix{&sum}
 }
-func getValue(sum *[][]int, i, j, m, n int) int {
-	if i < 0 || i >= m || j < 0 || j >= n {
-		return 0
-	}
-	return (*sum)[i][j]
-}
+
 func (this *NumMatrix) SumRegion(r1 int, c1 int, r2 int, c2 int) int {
 	matrix := *this.sum
-	m, n := len(matrix), len(matrix[0])
+	// offset
+	r1++
+	c1++
+	r2++
+	c2++
 	sum := matrix[r2][c2]
-	prevTop := getValue(this.sum, r1-1, c2, m, n)
-	prevLeft := getValue(this.sum, r2, c1-1, m, n)
-	prevTopLeft := getValue(this.sum, r1-1, c1-1, m, n)
+	prevTop := matrix[r1-1][c2]
+	prevLeft := matrix[r2][c1-1]
+	prevTopLeft := matrix[r1-1][c1-1]
 	ans := sum - prevTop - prevLeft + prevTopLeft
 	return ans
 }
