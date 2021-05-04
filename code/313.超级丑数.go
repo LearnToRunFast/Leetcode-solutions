@@ -36,47 +36,78 @@
  */
 
 // @lc code=start
-type minHeap []int64
-
-// min heap
-func (m minHeap) Len() int {
-	return len(m)
-}
-func (h minHeap) Swap(i, j int) {
-	h[i], h[j] = h[j], h[i]
-}
-func (h minHeap) Less(i, j int) bool {
-	return h[i] < h[j]
-}
-func (h minHeap) Top() int64 {
-	return h[0]
-}
-func (m *minHeap) Pop() interface{} {
-	old := *m
-	n := len(old)
-	x := old[n-1]
-	*m = old[:n-1]
-	return x
-}
-func (m *minHeap) Push(x interface{}) {
-	*m = append(*m, x.(int64))
+func min(i, j int) int {
+	if i > j {
+		return j
+	}
+	return i
 }
 func nthSuperUglyNumber(n int, primes []int) int {
-	pq := &minHeap{}
-	heap.Init(pq)
-	var ans int64 = 1
+	pLen := len(primes)
+	dp := make([]int, n)
+	dp[0] = 1
+	// next availble slots for primes
+	p := make([]int, pLen)
+
 	for i := 1; i < n; i++ {
-		for _, prime := range primes {
-			heap.Push(pq, ans*int64(prime))
+		currMin := 1<<31 - 1
+		for j := range primes {
+			currMin = min(currMin, primes[j]*dp[p[j]])
 		}
-		ans = heap.Pop(pq).(int64)
-		// remove duplication
-		for pq.Len() > 0 && ans == pq.Top() {
-			heap.Pop(pq)
+		dp[i] = currMin
+		for j := 0; j < pLen; j++ {
+			// shift it to next if it's same value
+			if primes[j]*dp[p[j]] == currMin {
+				p[j]++
+			}
 		}
 	}
-	return int(ans)
+	fmt.Printf("%v", dp)
+	return dp[n-1]
+
 }
+
+// type minHeap []int64
+
+// // min heap
+// func (m minHeap) Len() int {
+// 	return len(m)
+// }
+// func (h minHeap) Swap(i, j int) {
+// 	h[i], h[j] = h[j], h[i]
+// }
+// func (h minHeap) Less(i, j int) bool {
+// 	return h[i] < h[j]
+// }
+// func (h minHeap) Top() int64 {
+// 	return h[0]
+// }
+// func (m *minHeap) Pop() interface{} {
+// 	old := *m
+// 	n := len(old)
+// 	x := old[n-1]
+// 	*m = old[:n-1]
+// 	return x
+// }
+// func (m *minHeap) Push(x interface{}) {
+// 	*m = append(*m, x.(int64))
+// }
+// func nthSuperUglyNumber(n int, primes []int) int {
+// 	pq := &minHeap{}
+// 	heap.Init(pq)
+// 	var ans int64 = 1
+// 	for i := 1; i < n; i++ {
+// 		for _, prime := range primes {
+// 			heap.Push(pq, ans*int64(prime))
+// 		}
+// 		ans = heap.Pop(pq).(int64)
+// 		// remove duplication
+// 		for pq.Len() > 0 && ans == pq.Top() {
+// 			heap.Pop(pq)
+// 		}
+// 	}
+// 	return int(ans)
+// }
 
 // @lc code=end
 
