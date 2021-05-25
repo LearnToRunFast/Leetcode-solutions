@@ -49,31 +49,73 @@
  */
 
 // @lc code=start
-type keyValue struct {
-	row   int
-	col   int
-	value int
-}
-type MinHeap []*keyValue
+// type keyValue struct {
+// 	row   int
+// 	col   int
+// 	value int
+// }
+// type MinHeap []*keyValue
 
-func (m MinHeap) Len() int           { return len(m) }
-func (m MinHeap) Swap(i, j int)      { m[i], m[j] = m[j], m[i] }
-func (m MinHeap) Less(i, j int) bool { return m[i].value < m[j].value }
-func (m *MinHeap) Push(x interface{}) {
-	*m = append(*m, x.(*keyValue))
-}
-func (m *MinHeap) Pop() interface{} {
-	old := *m
-	n := len(old)
-	x := old[n-1]
-	*m = old[:n-1]
-	return x
-}
-func max(i, j int) int {
-	if i < j {
-		return j
+// func (m MinHeap) Len() int           { return len(m) }
+// func (m MinHeap) Swap(i, j int)      { m[i], m[j] = m[j], m[i] }
+// func (m MinHeap) Less(i, j int) bool { return m[i].value < m[j].value }
+// func (m *MinHeap) Push(x interface{}) {
+// 	*m = append(*m, x.(*keyValue))
+// }
+// func (m *MinHeap) Pop() interface{} {
+// 	old := *m
+// 	n := len(old)
+// 	x := old[n-1]
+// 	*m = old[:n-1]
+// 	return x
+// }
+// func max(i, j int) int {
+// 	if i < j {
+// 		return j
+// 	}
+// 	return i
+// }
+// func kthSmallest(matrix [][]int, k int) int {
+// 	n := len(matrix)
+// 	if n == 0 {
+// 		return 0
+// 	}
+// 	m := len(matrix[0])
+// 	sum := m * n
+// 	if k > sum {
+// 		return matrix[n-1][m-1]
+// 	}
+
+// 	h := &MinHeap{}
+// 	for i, row := range matrix {
+// 		heap.Push(h, &keyValue{i, 0, row[0]})
+// 	}
+// 	ans := 0
+// 	for k > 0 {
+// 		x := heap.Pop(h).(*keyValue)
+
+// 		newCol := x.col + 1
+// 		if newCol < m {
+// 			heap.Push(h, &keyValue{x.row, newCol, matrix[x.row][newCol]})
+// 		}
+// 		ans = x.value
+// 		k--
+// 	}
+// 	return ans
+// }
+// method 2
+func isLessK(matrix [][]int, n, k, mid int) bool {
+	i, j := n-1, 0
+	nums := 0
+	for i >= 0 && j < n {
+		if matrix[i][j] <= mid {
+			nums += i + 1
+			j++
+		} else {
+			i--
+		}
 	}
-	return i
+	return nums < k
 }
 func kthSmallest(matrix [][]int, k int) int {
 	n := len(matrix)
@@ -85,23 +127,17 @@ func kthSmallest(matrix [][]int, k int) int {
 	if k > sum {
 		return matrix[n-1][m-1]
 	}
-
-	h := &MinHeap{}
-	for i, row := range matrix {
-		heap.Push(h, &keyValue{i, 0, row[0]})
-	}
-	ans := 0
-	for k > 0 {
-		x := heap.Pop(h).(*keyValue)
-
-		newCol := x.col + 1
-		if newCol < m {
-			heap.Push(h, &keyValue{x.row, newCol, matrix[x.row][newCol]})
+	lo, hi := matrix[0][0], matrix[n-1][m-1]
+	for lo < hi {
+		mid := lo + (hi-lo)/2
+		if isLessK(matrix, n, k, mid) {
+			lo = mid + 1
+		} else {
+			hi = mid
 		}
-		ans = x.value
-		k--
 	}
-	return ans
+	return lo
+
 }
 
 // @lc code=end
