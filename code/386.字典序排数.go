@@ -25,25 +25,53 @@
 
 // @lc code=start
 
+// func lexicalOrder(n int) []int {
+// 	ans := make([]int, n)
+// 	count := 0
+// 	var addNum func(num int)
+
+// 	addNum = func(num int) {
+// 		if num > n {
+// 			return
+// 		}
+// 		ans[count] = num
+// 		count++
+// 		for i := 0; i <= 9; i++ {
+// 			addNum(num*10 + i)
+// 		}
+// 	}
+
+// 	for i := 1; i <= 9; i++ {
+// 		addNum(i)
+// 	}
+// 	return ans
+
+// }
+
 func lexicalOrder(n int) []int {
 	ans := make([]int, n)
 	count := 0
-	var addNum func(num int)
-
-	addNum = func(num int) {
-		if num > n {
-			return
+	stack := []int{}
+	for i := 9; i > 0; i-- {
+		if n >= i {
+			stack = append(stack, i)
 		}
+	}
+	lastIdx := len(stack) - 1
+	for lastIdx >= 0 {
+		num := stack[lastIdx]
 		ans[count] = num
 		count++
-		for i := 0; i <= 9; i++ {
-			addNum(num*10 + i)
+		stack = stack[:lastIdx]
+		for i := 9; i >= 0; i-- {
+			newNum := num*10 + i
+			if newNum <= n {
+				stack = append(stack, newNum)
+			}
 		}
+		lastIdx = len(stack) - 1
 	}
 
-	for i := 1; i <= 9; i++ {
-		addNum(i)
-	}
 	return ans
 
 }
