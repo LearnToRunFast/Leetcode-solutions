@@ -51,7 +51,7 @@ func maxRotateFunction(nums []int) int {
 	}
 	max := prev
 	k := n - 1
-	for i := 0; i < n; i++ {
+	for i := 1; i < n; i++ {
 		prev = prev + sum - n*nums[k]
 		if max < prev {
 			max = prev
