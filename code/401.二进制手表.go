@@ -69,22 +69,22 @@
 func dfs(ans *[]string, num, h, m, start int) {
 
 	if num == 0 {
-		val := fmt.Sprintf("%v:%02d", strconv.Itoa(h), m)
+		val := fmt.Sprintf("%v:%02d", h, m)
 		*ans = append(*ans, val)
 	}
 	for i := start; i < 10; i++ {
 		if i < 6 {
-			val := 1 << i
-			if m+val > 59 {
+			val := m + 1<<i
+			if val > 59 {
 				continue
 			}
-			dfs(ans, num-1, h, m+val, i+1)
+			dfs(ans, num-1, h, val, i+1)
 		} else {
-			val := 1 << (i - 6)
-			if h+val > 11 {
+			val := h + 1<<(i-6)
+			if val > 11 {
 				return
 			}
-			dfs(ans, num-1, h+val, m, i+1)
+			dfs(ans, num-1, val, m, i+1)
 		}
 	}
 }
