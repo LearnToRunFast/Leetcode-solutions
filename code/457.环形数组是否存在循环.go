@@ -95,7 +95,8 @@ func circularArrayLoop(nums []int) bool {
 		}
 		for nums[curr] < 0 && nums[curr] >= -MAX {
 			lastIdx = curr
-			curr = (curr + n - (-nums[curr] % n)) % n
+			//curr = (curr + n - (-nums[curr] % n)) % n
+			curr = ((nums[curr] % n) + n + curr) % n
 			nums[lastIdx] = -MAX - i - 1
 		}
 		if lastIdx != curr && nums[curr] == -MAX-i-1 {
