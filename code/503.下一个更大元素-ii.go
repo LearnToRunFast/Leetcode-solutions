@@ -33,22 +33,21 @@
 // @lc code=start
 func nextGreaterElements(nums []int) []int {
 	n := len(nums)
-	res := make([]int, n)
+	ans := make([]int, n)
+	for i := range ans {
+		ans[i] = -1
+	}
 	stack := []int{}
-	for i := n*2 - 1; i >= 0; i-- {
+	m := n*2 - 1
+	for i := 0; i < m; i++ {
 		idx := i % n
-		for len(stack) > 0 && nums[stack[len(stack)-1]] <= nums[idx] {
+		for len(stack) > 0 && nums[stack[len(stack)-1]] < nums[idx] {
+			ans[stack[len(stack)-1]] = nums[idx]
 			stack = stack[:len(stack)-1]
-		}
-		if len(stack) > 0 {
-			res[idx] = nums[stack[len(stack)-1]]
-		} else {
-			res[idx] = -1
 		}
 		stack = append(stack, idx)
 	}
-	return res
-
+	return ans
 }
 
 // @lc code=end
