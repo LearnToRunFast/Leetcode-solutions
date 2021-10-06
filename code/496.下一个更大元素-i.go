@@ -59,9 +59,10 @@
  */
 
 // @lc code=start
+
 func nextGreaterElement(nums1 []int, nums2 []int) []int {
-	dict := map[int]int{}
-	stack := []int{}
+	dict := make(map[int]int)
+	stack := make([]int, 0)
 	for _, num := range nums2 {
 		for len(stack) > 0 && stack[len(stack)-1] < num {
 			dict[stack[len(stack)-1]] = num
@@ -69,10 +70,11 @@ func nextGreaterElement(nums1 []int, nums2 []int) []int {
 		}
 		stack = append(stack, num)
 	}
+
 	ans := make([]int, len(nums1))
 	for i, num := range nums1 {
-		if _, ok := dict[num]; ok {
-			ans[i] = dict[num]
+		if v, ok := dict[num]; ok {
+			ans[i] = v
 		} else {
 			ans[i] = -1
 		}
