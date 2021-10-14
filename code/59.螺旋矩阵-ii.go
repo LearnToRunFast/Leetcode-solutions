@@ -46,47 +46,33 @@ func generateMatrix(n int) [][]int {
 	if n == 0 {
 		return [][]int{}
 	}
-	left, top, right, bottom := 0, 0, n-1, n-1
 	ans := make([][]int, n)
 	for i := range ans {
 		ans[i] = make([]int, n)
 	}
-	num := 1
-	for {
+	start, end := 1, n*n
+	left, right, top, bottom := 0, n-1, 0, n-1
+	for start <= end {
 		for i := left; i <= right; i++ {
-			ans[top][i] = num
-			num++
+			ans[top][i] = start
+			start++
 		}
 		top++
-		if top > bottom {
-			break
-		}
 		for i := top; i <= bottom; i++ {
-			ans[i][right] = num
-			num++
+			ans[i][right] = start
+			start++
 		}
 		right--
-		if left > right {
-			break
-		}
-
 		for i := right; i >= left; i-- {
-			ans[bottom][i] = num
-			num++
+			ans[bottom][i] = start
+			start++
 		}
 		bottom--
-		if top > bottom {
-			break
-		}
-
 		for i := bottom; i >= top; i-- {
-			ans[i][left] = num
-			num++
+			ans[i][left] = start
+			start++
 		}
 		left++
-		if left > right {
-			break
-		}
 	}
 	return ans
 }
