@@ -102,7 +102,9 @@ func (this *MyLinkedList) AddAtIndex(index int, val int) {
 		head = head.Next
 		index--
 	}
-
+	if head == this.dummy && index > 0 {
+		return
+	}
 	node := &Node{Val: val, Next: head, Pre: head.Pre}
 	head.Pre.Next = node
 	head.Pre = node
