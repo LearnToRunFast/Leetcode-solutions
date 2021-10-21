@@ -41,7 +41,7 @@ func isAnagram(s string, t string) bool {
 	if n != m {
 		return false
 	}
-	lookup := map[byte]int{}
+	lookup := make([]int, 128)
 	for i := range s {
 		lookup[s[i]]++
 		lookup[t[i]]--
