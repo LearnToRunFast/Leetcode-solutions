@@ -81,10 +81,6 @@
  */
 
 // @lc code=start
-package main
-
-import "strings"
-
 func reverseWords(s string) string {
 	tokens := strings.Fields(strings.Trim(s, " "))
 	l, r := 0, len(tokens)-1
