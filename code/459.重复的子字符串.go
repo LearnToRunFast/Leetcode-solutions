@@ -46,9 +46,28 @@
  */
 
 // @lc code=start
+// func repeatedSubstringPattern(s string) bool {
+// 	newS := s + s
+// 	return strings.Contains(newS[1:len(newS)-1], s)
+// }
 func repeatedSubstringPattern(s string) bool {
-	newS := s + s
-	return strings.Contains(newS[1:len(newS)-1], s)
+	n := len(s)
+	prefix := make([]int, n)
+	j := 0
+	for i := 1; i < n; i++ {
+		for j > 0 && s[i] != s[j] {
+			j = prefix[j-1]
+		}
+		if s[i] == s[j] {
+			j++
+		}
+		prefix[i] = j
+	}
+	subLen := n - prefix[n-1]
+	if prefix[n-1] != 0 && n%subLen == 0 {
+		return true
+	}
+	return false
 }
 
 // @lc code=end
