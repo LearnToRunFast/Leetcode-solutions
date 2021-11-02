@@ -74,6 +74,7 @@ func strStr(haystack string, needle string) int {
 	// create prefix table with m + 1 size
 	// index 0 as placeholder
 	prefix := make([]int, m)
+	prefix[0] = 0 // you can omit this line
 	j := 0
 	for i := 1; i < m; i++ {
 		for j > 0 && needle[i] != needle[j] {
