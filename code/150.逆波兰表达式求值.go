@@ -75,43 +75,31 @@
  *
  *
  */
-package main
-
-import "strconv"
 
 // @lc code=start
-func eval(token string, stack []int) []int {
-	switch token {
-	case "+", "-", "/", "*":
-		n := len(stack)
-		a := stack[n-2]
-		b := stack[n-1]
-		switch token {
-		case "+":
-			stack[n-2] = a + b
-		case "-":
-			stack[n-2] = a - b
-		case "/":
-			stack[n-2] = a / b
-		case "*":
-			stack[n-2] = a * b
-		}
-		stack = stack[:n-1]
-	default:
-		val, err := strconv.Atoi(token)
-		if err != nil {
-			return []int{}
-		}
-
-		stack = append(stack, val)
-	}
-	return stack
-}
 func evalRPN(tokens []string) int {
 	n := len(tokens)
 	stack := make([]int, 0, n)
-	for _, v := range tokens {
-		stack = eval(v, stack)
+	for _, token := range tokens {
+		val, err := strconv.Atoi(token)
+		if err == nil {
+			stack = append(stack, val)
+		} else {
+			l := len(stack)
+			a := stack[l-2]
+			b := stack[l-1]
+			switch token {
+			case "+":
+				stack[l-2] = a + b
+			case "-":
+				stack[l-2] = a - b
+			case "/":
+				stack[l-2] = a / b
+			case "*":
+				stack[l-2] = a * b
+			}
+			stack = stack[:l-1]
+		}
 	}
 	return stack[0]
 }
