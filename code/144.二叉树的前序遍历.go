@@ -93,25 +93,53 @@
 // }
 
 // stack version
+// func preorderTraversal(root *TreeNode) []int {
+// 	ans := make([]int, 0)
+// 	stack := make([]*TreeNode, 0)
+// 	if root != nil {
+// 		stack = append(stack, root)
+// 	}
+// 	for len(stack) > 0 {
+// 		node := stack[len(stack)-1]
+// 		stack = stack[:len(stack)-1]
+// 		ans = append(ans, node.Val)
+// 		if node.Right != nil {
+// 			stack = append(stack, node.Right)
+// 		}
+// 		if node.Left != nil {
+// 			stack = append(stack, node.Left)
+// 		}
+// 	}
+// 	return ans
+// }
+// general form
 func preorderTraversal(root *TreeNode) []int {
-	ans := make([]int, 0)
-	stack := make([]*TreeNode, 0)
-	if root != nil {
-		stack = append(stack, root)
+	if root == nil {
+		return nil
 	}
+	stack := make([]*TreeNode, 0)
+	ans := make([]int, 0)
+	stack = append(stack, root)
 	for len(stack) > 0 {
 		node := stack[len(stack)-1]
 		stack = stack[:len(stack)-1]
-		ans = append(ans, node.Val)
-		if node.Right != nil {
-			stack = append(stack, node.Right)
-		}
-		if node.Left != nil {
-			stack = append(stack, node.Left)
+		if node != nil {
+
+			if node.Right != nil {
+				stack = append(stack, node.Right)
+			}
+			if node.Left != nil {
+				stack = append(stack, node.Left)
+			}
+			stack = append(stack, node)
+			stack = append(stack, nil)
+		} else {
+			node = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			ans = append(ans, node.Val)
 		}
 	}
 	return ans
-
 }
 
 // @lc code=end
