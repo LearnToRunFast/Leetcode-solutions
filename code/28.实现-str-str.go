@@ -64,44 +64,37 @@
 // @lc code=start
 func strStr(haystack string, needle string) int {
 	n, m := len(haystack), len(needle)
+	if m > n {
+		return -1
+	}
 	if m == 0 {
 		return 0
 	}
-	if n < m {
-		return -1
-	}
-
-	// create prefix table with m + 1 size
-	// index 0 as placeholder
-	prefix := make([]int, m)
-	prefix[0] = 0 // you can omit this line
+	next := make([]int, m)
 	j := 0
 	for i := 1; i < m; i++ {
 		for j > 0 && needle[i] != needle[j] {
-			j = prefix[j-1]
+			j = next[j-1]
 		}
 		if needle[i] == needle[j] {
 			j++
 		}
-		prefix[i] = j
+		next[i] = j
 	}
-
-	// search
 	j = 0
 	for i := range haystack {
-		for j > 0 && haystack[i] != needle[j] {
-			j = prefix[j-1]
+		for j > 0 && needle[j] != haystack[i] {
+			j = next[j-1]
 		}
-
-		if haystack[i] == needle[j] {
+		if needle[j] == haystack[i] {
 			j++
 			if j == m {
 				return i - m + 1
 			}
 		}
 	}
-
 	return -1
+
 }
 
 // @lc code=end
