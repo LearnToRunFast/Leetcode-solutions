@@ -52,11 +52,10 @@
  */
 
 // @lc code=start
-
-func getBoard(queens *[]int, n int) []string {
-	board := []string{}
+func drawBoard(queens *[]int, n int) []string {
+	board := make([]string, 0)
 	for i := 0; i < n; i++ {
-		row := make([]byte, n) // char array
+		row := make([]byte, n)
 		for j := 0; j < n; j++ {
 			row[j] = '.'
 		}
@@ -66,38 +65,27 @@ func getBoard(queens *[]int, n int) []string {
 	return board
 }
 
-// d1 is top left to bottom right diagonal
-// d2 is top right to bottom left diagonal
-func backtrack(queens *[]int, ans *[][]string, n, row, col, d1, d2 int) {
-	if row == n {
-		*ans = append(*ans, getBoard(queens, n))
+// // tld is top left to bottom right diagonal
+// // trd is top right to bottom left diagonal
+func backtrack(queens *[]int, ans *[][]string, n, currRow, col, tld, trd int) {
+	if currRow == n {
+		*ans = append(*ans, drawBoard(queens, n))
 		return
 	}
-	// bit-1 as empty slot
-	slots := ^(col | d1 | d2)
-	// mask
-	mask := (1 << n) - 1
-
-	slots = mask & slots
-
+	mask := (1 << n) - 1             // all 1
+	takenSlots := ^(col | tld | trd) // invert all 1 to 0
+	slots := mask & takenSlots       // find available slots
 	for slots != 0 {
-		// (x & (-x)) get pos of lowest bit of 1
-		// -x = ~x + 1
-		pos := slots & (-slots)
-		// (x & (x - 1)) set lowest bit of 1 into 0
-		slots = slots & (slots - 1)
-		// get specify column number by counting the number of 1
-		column := bits.OnesCount(uint(pos - 1))
-		(*queens)[row] = column
-		// d1 will shift to right in the board(shift left in bit order), d2 is opposite direction
-		backtrack(queens, ans, n, row+1, col|pos, (d1|pos)<<1, (d2|pos)>>1)
-
+		pos := slots & (-slots)                            // get lowest bit of 1
+		slots = slots & (slots - 1)                        // set lowest bit of 1 to 0
+		(*queens)[currRow] = bits.OnesCount(uint(pos - 1)) // get column number by counting the number of 1
+		backtrack(queens, ans, n, currRow+1, col|pos, (tld|pos)<<1, (trd|pos)>>1)
 	}
 }
+
 func solveNQueens(n int) [][]string {
 	ans := [][]string{}
 	queens := make([]int, n)
-
 	backtrack(&queens, &ans, n, 0, 0, 0, 0)
 	return ans
 }
