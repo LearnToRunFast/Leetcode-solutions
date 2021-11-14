@@ -45,30 +45,28 @@
  */
 
 // @lc code=start
-var ans [][]int
-var temp []int
-
-func dfs(curr, prev int, nums []int) {
-	if curr == len(nums) {
-		if len(temp) >= 2 {
-			copy := append([]int{}, temp...)
-			ans = append(ans, copy)
+func dfs(nums []int, startIndex int, path []int, ans *[][]int) {
+	if len(path) >= 2 {
+		*ans = append(*ans, append([]int{}, path...))
+	}
+	visited := make([]int, 201)
+	for i := startIndex; i < len(nums); i++ {
+		// the range is from -100 to 100
+		if visited[nums[i]+100] == 1 {
+			continue
 		}
-		return
-	}
-	if nums[curr] >= prev {
-		temp = append(temp, nums[curr])
-		dfs(curr+1, nums[curr], nums)
-		temp = temp[:len(temp)-1]
-	}
-	if nums[curr] != prev {
-		dfs(curr+1, prev, nums)
+		if len(path) == 0 || nums[i] >= path[len(path)-1] {
+			visited[nums[i]+100] = 1
+			dfs(nums, i+1, append(path, nums[i]), ans)
+		}
+
 	}
 }
 func findSubsequences(nums []int) [][]int {
-	ans = make([][]int, 0)
-	temp = make([]int, 0)
-	dfs(0, -1<<31, nums)
+	ans := make([][]int, 0)
+	path := make([]int, 0)
+	startIndex := 0
+	dfs(nums, startIndex, path, &ans)
 	return ans
 }
 

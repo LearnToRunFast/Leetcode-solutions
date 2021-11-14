@@ -29,33 +29,27 @@
  * ]
  *
  */
-package main
-
 // @lc code=start
-
+func backtracking(path []int, n, curr, k int, res *[][]int) {
+	if len(path) == k {
+		*res = append(*res, append([]int{}, path...))
+		return
+	}
+	if n-curr+1 < k-len(path) {
+		return
+	}
+	for i := curr; i <= n; i++ {
+		path = append(path, i)
+		backtracking(path, n, i+1, k, res)
+		path = path[:len(path)-1]
+	}
+}
 func combine(n int, k int) [][]int {
-	if k <= 0 || k > n {
-		return [][]int{}
-	}
-	perms := make([][]int, 0, n)
-	perm := make([]int, 0, k)
-	var backtracking func(start int)
-
-	backtracking = func(start int) {
-		if len(perm) == k {
-			newPerm := append([]int{}, perm...)
-			perms = append(perms, newPerm)
-			return
-		}
-		end := n - (k - len(perm)) + 1
-		for i := start; i <= end; i++ {
-			perm = append(perm, i)
-			backtracking(i + 1)
-			perm = perm[:len(perm)-1]
-		}
-	}
-	backtracking(1)
-	return perms
+	var res [][]int
+	var path []int
+	curr := 1
+	backtracking(path, n, curr, k, &res)
+	return res
 }
 
 // @lc code=end

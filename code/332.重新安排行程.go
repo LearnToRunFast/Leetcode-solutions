@@ -48,6 +48,19 @@
  */
 
 // @lc code=start
+func dfs(ans *[]string, edges map[string][]string, start string) {
+	for {
+		if v, ok := edges[start]; !ok || len(v) == 0 {
+			break
+		}
+		next := edges[start][0]
+		edges[start] = edges[start][1:]
+		dfs(ans, edges, next)
+	}
+	*ans = append(*ans, start)
+}
+
+// according to the question, it says there must be a valid path
 func findItinerary(tickets [][]string) []string {
 
 	ans := make([]string, 0)
@@ -58,24 +71,13 @@ func findItinerary(tickets [][]string) []string {
 	for key := range edges {
 		sort.Strings(edges[key])
 	}
-	var dfs func(curr string)
-	dfs = func(curr string) {
-		for {
-			if v, ok := edges[curr]; !ok || len(v) == 0 {
-				break
-			}
-			next := edges[curr][0]
-			edges[curr] = edges[curr][1:]
-			dfs(next)
-		}
-		ans = append(ans, curr)
-	}
-	dfs("JFK")
-	n := len(ans)
-	mid := n / 2
-	for lo := 0; lo < mid; lo++ {
-		hi := n - lo - 1
-		ans[lo], ans[hi] = ans[hi], ans[lo]
+	dfs(&ans, edges, "JFK")
+
+	l, r := 0, len(ans)-1
+	for l < r {
+		ans[l], ans[r] = ans[r], ans[l]
+		l++
+		r--
 	}
 	return ans
 

@@ -67,58 +67,37 @@
  *
  *
  */
-package main
-
-import (
-	"fmt"
-	"strconv"
-	"strings"
-)
-
 // @lc code=start
 const MAX_SEG_LEN = 4
 
-func inRange(s string) (int, bool) {
-	if s[0] == '0' {
-		if len(s) == 1 {
-			return 0, true
-		}
-		return 0, false
+func isValidSeg(s string) bool {
+	if len(s) > 1 && s[0] == '0' {
+		return false
 	}
-	v, err := strconv.Atoi(s)
-	if err != nil || v < 0 || v > 255 {
-		return 0, false
-	}
-	return v, true
-
+	n, err := strconv.Atoi(s)
+	return err == nil && n >= 0 && n <= 255
 }
-
-func restoreIpAddresses(s string) []string {
-	ans := []string{}
-	n := len(s)
-	segments := make([]int, MAX_SEG_LEN)
-	var backtracking func(l, r, currSegIdx int)
-
-	backtracking = func(l, r, currSegIdx int) {
-		if currSegIdx == MAX_SEG_LEN {
-			if r == n {
-				segment := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(segments)), "."), "[]")
-				ans = append(ans, segment)
-			}
-			return
+func dfs(s string, start int, seg []string, res *[]string) {
+	if len(seg) == MAX_SEG_LEN || start == len(s) {
+		if len(seg) == MAX_SEG_LEN && start == len(s) {
+			*res = append(*res, strings.Join(seg, "."))
 		}
-		l = r
-		for r = l + 1; r <= n; r++ {
-			seg, ok := inRange(s[l:r])
-			if !ok {
-				break
-			}
-			segments[currSegIdx] = seg
-			backtracking(l, r, currSegIdx+1)
+		return
+	}
+	for i := start; i < len(s); i++ {
+		newSeg := s[start : i+1]
+		if isValidSeg(newSeg) && len(seg) < 4 {
+			dfs(s, i+1, append(seg, newSeg), res)
+		} else {
+			break
 		}
 	}
-	backtracking(0, 0, 0)
-	return ans
+}
+func restoreIpAddresses(s string) []string {
+	var res []string
+	var seg []string
+	dfs(s, 0, seg, &res)
+	return res
 }
 
 // @lc code=end

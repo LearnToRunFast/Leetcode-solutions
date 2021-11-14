@@ -46,36 +46,31 @@
  */
 
 // @lc code=start
-
-func permuteUnique(nums []int) [][]int {
-	sort.Ints(nums)
-	n := len(nums)
-	perm := []int{}
-	vis := make([]bool, n)
-	ans := [][]int{}
-
-	var backtrack func(int)
-
-	backtrack = func(idx int) {
-		if idx == n {
-			ans = append(ans, append(make([]int, 0, len(perm)), perm...))
-			return
+func dfs(nums []int, path []int, res *[][]int, visited []bool) {
+	if len(path) == len(nums) {
+		*res = append(*res, append([]int{}, path...))
+		return
+	}
+	for i := 0; i < len(nums); i++ {
+		if visited[i] {
+			continue
 		}
-		for i, v := range nums {
-			// only take the first duplidated number that havent been visited before.
-			if vis[i] || (i > 0 && v == nums[i-1] && !vis[i-1]) {
-				continue
-			}
-			perm = append(perm, v)
-			vis[i] = true
-			backtrack(idx + 1)
-			vis[i] = false
-			perm = perm[:len(perm)-1] // remove last element
+		if i > 0 && nums[i] == nums[i-1] && !visited[i-1] {
+			continue
 		}
+		visited[i] = true
+		dfs(nums, append(path, nums[i]), res, visited)
+		visited[i] = false
 	}
 
-	backtrack(0)
-	return ans
+}
+func permuteUnique(nums []int) [][]int {
+	res := make([][]int, 0)
+	perm := make([]int, 0)
+	visited := make([]bool, len(nums))
+	sort.Ints(nums)
+	dfs(nums, perm, &res, visited)
+	return res
 }
 
 // @lc code=end

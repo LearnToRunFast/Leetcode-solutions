@@ -31,30 +31,28 @@
  * ]
  *
  */
-package main
-
-import "sort"
-
 // @lc code=start
-func subsetsWithDup(nums []int) [][]int {
-	sort.Ints(nums)
-	perms := [][]int{[]int{}}
-	perm := []int{}
-	var getPerm func(nums []int)
-	getPerm = func(nums []int) {
-		n := len(nums)
-		for i := 0; i < n; i++ {
-			if i > 0 && nums[i] == nums[i-1] {
-				continue
-			}
-			perm = append(perm, nums[i])
-			perms = append(perms, append([]int{}, perm...))
-			getPerm(nums[i+1:])
-			perm = perm[:len(perm)-1]
-		}
+func dfs(nums []int, startIndex int, perm []int, res *[][]int) {
+	*res = append(*res, append([]int{}, perm...))
+	if startIndex == len(nums) {
+		return
 	}
-	getPerm(nums)
-	return perms
+	for i := startIndex; i < len(nums); i++ {
+		if i > startIndex && nums[i] == nums[i-1] {
+			continue
+		}
+		dfs(nums, i+1, append(perm, nums[i]), res)
+	}
+}
+func subsetsWithDup(nums []int) [][]int {
+	res := make([][]int, 0)
+	if len(nums) == 0 {
+		return res
+	}
+	startIndex := 0
+	sort.Ints(nums)
+	dfs(nums, startIndex, []int{}, &res)
+	return res
 }
 
 // @lc code=end

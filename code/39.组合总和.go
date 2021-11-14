@@ -70,28 +70,30 @@
  */
 
 // @lc code=start
-func dfs(ans *[][]int, path []int, candidates []int, target int, index int) {
+func dfs(ans *[][]int, path, candidates []int, target, startIndex int) {
+	if target < 0 {
+		return
+	}
 	if target == 0 {
 		*ans = append(*ans, append([]int{}, path...))
 		return
 	}
-	if target < 0 {
-		return
-	}
-	for i := index; i < len(candidates); i++ {
-		path = append(path, candidates[i])
-		dfs(ans, path, candidates, target-candidates[i], i)
-		path = path[:len(path)-1]
+	for i := startIndex; i < len(candidates); i++ {
+		if target-candidates[i] < 0 {
+			break
+		}
+		dfs(ans, append(path, candidates[i]), candidates, target-candidates[i], i)
 	}
 }
+
 func combinationSum(candidates []int, target int) [][]int {
 	ans := [][]int{}
 	if len(candidates) == 0 {
 		return ans
 	}
 	sort.Ints(candidates)
-
-	dfs(&ans, []int{}, candidates, target, 0)
+	startIndex := 0
+	dfs(&ans, []int{}, candidates, target, startIndex)
 	return ans
 }
 

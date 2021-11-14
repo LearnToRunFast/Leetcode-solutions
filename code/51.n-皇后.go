@@ -52,41 +52,48 @@
  */
 
 // @lc code=start
-func drawBoard(queens *[]int, n int) []string {
-	board := make([]string, 0)
+
+func generateBoard(queens []int, n int) []string {
+	board := make([]string, n)
 	for i := 0; i < n; i++ {
 		row := make([]byte, n)
 		for j := 0; j < n; j++ {
 			row[j] = '.'
 		}
-		row[(*queens)[i]] = 'Q'
-		board = append(board, string(row))
+		qPosition := queens[i]
+		row[qPosition] = 'Q'
+		board[i] = string(row)
 	}
 	return board
 }
-
-// // tld is top left to bottom right diagonal
-// // trd is top right to bottom left diagonal
-func backtrack(queens *[]int, ans *[][]string, n, currRow, col, tld, trd int) {
-	if currRow == n {
-		*ans = append(*ans, drawBoard(queens, n))
+func backtrack(queens []int, ans *[][]string, n, startRow, colSlots, backSlashSlots, forwardSlashSlots int) {
+	if startRow == n {
+		*ans = append(*ans, generateBoard(queens, n))
 		return
 	}
-	mask := (1 << n) - 1             // all 1
-	takenSlots := ^(col | tld | trd) // invert all 1 to 0
-	slots := mask & takenSlots       // find available slots
-	for slots != 0 {
-		pos := slots & (-slots)                            // get lowest bit of 1
-		slots = slots & (slots - 1)                        // set lowest bit of 1 to 0
-		(*queens)[currRow] = bits.OnesCount(uint(pos - 1)) // get column number by counting the number of 1
-		backtrack(queens, ans, n, currRow+1, col|pos, (tld|pos)<<1, (trd|pos)>>1)
+	mask := (1 << uint(n)) - 1
+	slots := colSlots | backSlashSlots | forwardSlashSlots // 1 means occupied
+	availableSlots := mask & (^slots)                      // 1 means available
+	for availableSlots != 0 {
+		position := availableSlots & (-availableSlots)         // get the rightmost 1
+		availableSlots = availableSlots & (availableSlots - 1) // remove the rightmost 1
+		countPosition := bits.OnesCount(uint(position - 1))
+		queens[startRow] = countPosition
+		newColSlots := colSlots | position
+		newBackSlots := (backSlashSlots | position) << 1
+		newForwardSlots := (forwardSlashSlots | position) >> 1
+		backtrack(queens, ans, n, startRow+1, newColSlots, newBackSlots, newForwardSlots)
+		queens[startRow] = 0
 	}
-}
 
+}
 func solveNQueens(n int) [][]string {
 	ans := [][]string{}
+	// one dimension array for position of queen in each row
 	queens := make([]int, n)
-	backtrack(&queens, &ans, n, 0, 0, 0, 0)
+
+	startRow, colSlots, backSlashSlots, forwardSlashSlots := 0, 0, 0, 0
+	backtrack(queens, &ans, n, startRow, colSlots, backSlashSlots, forwardSlashSlots)
 	return ans
 }
 
