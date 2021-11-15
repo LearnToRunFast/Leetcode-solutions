@@ -64,31 +64,24 @@
  */
 
 // @lc code=start
-func getPaths(i, j, m, n int, dp [][]int) int {
-	if i < 0 || i >= m || j < 0 || j >= n {
-		return 0
-	}
-	return dp[i][j]
-}
-
 func uniquePaths(m int, n int) int {
 	dp := make([][]int, m)
-	dp[0] = make([]int, n)
-	for i := 0; i < n; i++ {
-		dp[0][i] = 1
-	}
 	for i := 0; i < m; i++ {
-		if i != 0 {
-			dp[i] = make([]int, n)
+		dp[i] = make([]int, n)
+		if i == 0 {
 			for j := 0; j < n; j++ {
-				up := getPaths(i-1, j, m, n, dp)
-				left := getPaths(i, j-1, m, n, dp)
-				dp[i][j] = up + left
+				dp[i][j] = 1
 			}
+		} else {
+			dp[i][0] = 1
+		}
+	}
+	for i := 1; i < m; i++ {
+		for j := 1; j < n; j++ {
+			dp[i][j] = dp[i-1][j] + dp[i][j-1]
 		}
 	}
 	return dp[m-1][n-1]
-
 }
 
 // @lc code=end

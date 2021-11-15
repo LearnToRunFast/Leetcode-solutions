@@ -63,19 +63,19 @@ func max(a, b int) int {
 	}
 	return b
 }
-func helper(root *TreeNode) []int {
+func findMax(root *TreeNode) (int, int) {
 	if root == nil {
-		return []int{0, 0}
+		return 0, 0
 	}
-	left := helper(root.Left)
-	right := helper(root.Right)
-	selected := root.Val + left[1] + right[1]
-	unselected := max(left[0], left[1]) + max(right[0], right[1])
-	return []int{selected, unselected}
+	includeRootLeft, excludeRootLeft := findMax(root.Left)
+	includeRootRight, excludeRootRight := findMax(root.Right)
+	includeRoot := root.Val + excludeRootLeft + excludeRootRight
+	excludeRoot := max(includeRootLeft, excludeRootLeft) + max(includeRootRight, excludeRootRight)
+	return includeRoot, excludeRoot
 }
 func rob(root *TreeNode) int {
-	val := helper(root)
-	return max(val[0], val[1])
+	includeRoot, excludeRoot := findMax(root)
+	return max(includeRoot, excludeRoot)
 }
 
 // @lc code=end

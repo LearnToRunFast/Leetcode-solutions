@@ -58,36 +58,39 @@
  */
 
 // @lc code=start
-func getSteps(obstacleGrid, dp [][]int, i, j int) int {
-	if i < 0 || j < 0 || i >= len(obstacleGrid) || j >= len(obstacleGrid[0]) {
+func uniquePathsWithObstacles(obstacleGrid [][]int) int {
+	n := len(obstacleGrid)
+	if n == 0 {
 		return 0
 	}
-	return dp[i][j]
-}
-
-func uniquePathsWithObstacles(obstacleGrid [][]int) int {
-	n, m := len(obstacleGrid), len(obstacleGrid[0])
+	m := len(obstacleGrid[0])
 	dp := make([][]int, n)
-	dp[0] = make([]int, m)
-	for i := range dp[0] {
-		if obstacleGrid[0][i] == 1 {
-			break
-		}
-		dp[0][i] = 1
-	}
-	for i := 1; i < len(dp); i++ {
+	for i := 0; i < n; i++ {
 		dp[i] = make([]int, m)
-		for j := range dp[i] {
-			if obstacleGrid[i][j] == 0 {
-				top := getSteps(obstacleGrid, dp, i-1, j)
-				left := getSteps(obstacleGrid, dp, i, j-1)
-				dp[i][j] = top + left
-			} else {
+	}
+	if obstacleGrid[0][0] == 1 {
+		return 0
+	}
+	dp[0][0] = 1
+	for i := 0; i < n; i++ {
+		for j := 0; j < m; j++ {
+			if i == 0 && j == 0 {
+				continue
+			}
+			if obstacleGrid[i][j] == 1 {
 				dp[i][j] = 0
+				continue
+			} else if i == 0 {
+				dp[i][j] = dp[i][j-1]
+			} else if j == 0 {
+				dp[i][j] = dp[i-1][j]
+			} else {
+				dp[i][j] = dp[i][j-1] + dp[i-1][j]
 			}
 		}
 	}
 	return dp[n-1][m-1]
+
 }
 
 // @lc code=end

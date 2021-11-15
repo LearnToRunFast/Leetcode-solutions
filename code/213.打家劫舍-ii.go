@@ -64,9 +64,7 @@ func max(a, b int) int {
 func helper(nums []int) int {
 	prev, curr := 0, 0
 	for _, v := range nums {
-		temp := curr
-		curr = max(curr, prev+v)
-		prev = temp
+		prev, curr = curr, max(prev+v, curr)
 	}
 	return curr
 }

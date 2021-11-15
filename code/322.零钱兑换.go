@@ -75,24 +75,20 @@ func min(a, b int) int {
 	return b
 }
 func coinChange(coins []int, amount int) int {
-	max := amount + 1
-	dp := make([]int, max)
-	for i := 0; i < max; i++ {
-		dp[i] = max
+	maxAmount := amount + 1
+	dp := make([]int, maxAmount)
+	for i := 0; i < maxAmount; i++ {
+		dp[i] = maxAmount
 	}
 	dp[0] = 0
-	for i := 1; i <= amount; i++ {
-		for _, coin := range coins {
-			if i >= coin {
-				dp[i] = min(dp[i], dp[i-coin]+1)
-			}
+	for _, coin := range coins {
+		for i := coin; i < maxAmount; i++ {
+			dp[i] = min(dp[i], dp[i-coin]+1)
 		}
 	}
-	if dp[amount] == max {
+	if dp[amount] == maxAmount {
 		return -1
 	}
 	return dp[amount]
 }
-
-// @lc code=end
 
