@@ -69,6 +69,7 @@ func min(a, b int) int {
 }
 func minDistance(word1 string, word2 string) int {
 	m, n := len(word1), len(word2)
+	// define dp[i][j] to be the min distance between word1[:i] and word2[:j]
 	dp := make([][]int, m+1)
 
 	for i := range dp {

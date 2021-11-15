@@ -42,13 +42,10 @@ func maxProfit(prices []int) int {
 		return 0
 	}
 	// 0 hold
-	// 1 sold in freeze
+	// 1 sold in freeze (sold at that day)
 	// 2 sold no in freeze
 	n := len(prices)
-	dp := make([][]int, n)
-	for i := range dp {
-		dp[i] = make([]int, 3)
-	}
+	dp := make([][3]int, n)
 	dp[0][0] = -prices[0]
 	for i := 1; i < n; i++ {
 		// yesterday alr hold or sold no in freeze

@@ -66,22 +66,30 @@
  */
 
 // @lc code=start
+func maxProfit(prices []int) int {
+	if len(prices) < 2 {
+		return 0
+	}
+	buy1, sell1, buy2, sell2 := -1<<31, 0, -1<<31, 0
+	for _, price := range prices {
+		buy1 = max(buy1, -price)
+		sell1 = max(sell1, price+buy1)
+		buy2 = max(buy2, sell1-price)
+		sell2 = max(sell2, price+buy2)
+	}
+	return sell2
+}
 func max(a, b int) int {
 	if a > b {
 		return a
 	}
 	return b
 }
-func maxProfit(prices []int) int {
-	buy1, buy2 := math.MinInt32, math.MinInt32
-	sell1, sell2 := 0, 0
-	for _, v := range prices {
-		buy1 = max(buy1, -v) // can be min(buy1, v)
-		sell1 = max(sell1, buy1+v)
-		buy2 = max(buy2, sell1-v) // can be min(buy2, sell1+v)
-		sell2 = max(sell2, buy2+v)
+func min(a, b int) int {
+	if a < b {
+		return a
 	}
-	return sell2
+	return b
 }
 
 // @lc code=end

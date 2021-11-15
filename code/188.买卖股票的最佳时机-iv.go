@@ -57,22 +57,22 @@ func max(a, b int) int {
 	return b
 }
 func maxProfit(k int, prices []int) int {
-	if k < 1 {
+	n := len(prices)
+	if k < 1 || n < 2 {
 		return 0
 	}
+	// dp[i][j], dp[i][0] i times buy, dp[i][1] i times sell, the amount of money I  earn
 	dp := make([][2]int, k+1)
-	// 0 is buy 1 is sell
 	for i := 0; i <= k; i++ {
-		dp[i][0] = math.MinInt64
+		dp[i][0] = -1 << 31
 	}
-	for i := 0; i < len(prices); i++ {
-		for j := 1; j <= k; j++ {
-			dp[j][0] = max(dp[j][0], dp[j-1][1]-prices[i])
-			dp[j][1] = max(dp[j][1], dp[j][0]+prices[i])
+	for _, price := range prices {
+		for i := 1; i <= k; i++ {
+			dp[i][0] = max(dp[i][0], dp[i-1][1]-price)
+			dp[i][1] = max(dp[i][1], dp[i][0]+price)
 		}
 	}
 	return dp[k][1]
-
 }
 
 // @lc code=end
